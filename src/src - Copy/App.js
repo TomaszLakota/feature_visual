@@ -5,24 +5,15 @@ class App extends React.Component {
     state = {
         classes: ["plane", "car", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck"],
         models: [
-            { name: "resnet", layers: 11 },
+            { name: "resnet", layers: 5 },
             { name: "vgg", layers: 5 },
             { name: "eficientnet", layers: 5 }
         ],
         selectedClassIndex: 0,
         selectedModel: 0,
-        originalImageLink: "http://localhost:5000/img/10352/0.png",
-        layersImageLinks: [
-            "http://localhost:5000/img/10352/0.png",
-            "http://localhost:5000/img/10352/0.png",
-            "http://localhost:5000/img/10352/0.png",
-            "http://localhost:5000/img/10352/0.png",
-            "http://localhost:5000/img/10352/0.png",
-            "http://localhost:5000/img/10352/0.png",
-            "http://localhost:5000/img/10352/0.png",
-            "http://localhost:5000/img/10352/0.png"
-        ],
-        saliencyMapLinks: "http://localhost:5000/img/10352/0.png"
+        originalImageLink: "localhost:5000/api/costam/123/original.jpg",
+        layersImageLinks: ["localhost:5000/api/costam/123/original.jpg", "localhost:5000/api/costam/123/original.jpg"],
+        saliencyMapLinks: "localhost:5000/api/costam/123/original.jpg"
     };
     render() {
         return (
@@ -64,31 +55,27 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        // this.getImageLink(this.state.selectedModel, this.state.selectedClassIndex); //############################### UNCOMMENT
+        this.getImageLink(this.state.selectedModel, this.state.selectedClassIndex);
     }
 
     async getImageLink(model, classs) {
-        const apiLink = "http://127.0.0.1:5000/get_single?selected_class=1&model=resnet";
-        const response = await fetch(apiLink);
-        console.log(response);
-        const imgLink = await response.json();
-        // const imgLink = "http://localhost:8000/123/";
-        console.log(imgLink);
-        this.updateLinksInState(imgLink.folder_path);
+        const apiLink = "localhost:5000/get_single";
+        // const response = await fetch(apiLink);
+        // const imgLink = await response.json();
+        const imgLink = "http://localhost:8000/123/";
+        this.updateLinksInState(imgLink);
     }
 
     updateLinksInState(link) {
         const length = this.state.models[this.state.selectedModel].layers;
         const layersImageLinks = [];
-        link = "http://localhost:5000/" + link;
-        console.log(link);
         for (let i = 0; i < length; i++) {
-            layersImageLinks.push(`${link}${i}.png`);
+            layersImageLinks.push(`${link}img${i}.png`);
         }
         this.setState({
             originalImageLink: link + "input_image.png",
             layersImageLinks: layersImageLinks,
-            saliencyMapLinks: link + "sal0.png"
+            saliencyMapLinks: link + "saliency_map.png"
         });
     }
 }

@@ -28,7 +28,7 @@ body {
 
 .image-box:hover {
     padding: 20px 0px;
-    flex-basis: 30%;
+    flex-grow: 3;
 }
 
 .image-container img {
